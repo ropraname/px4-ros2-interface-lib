@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <optional>
 #include <rclcpp/rclcpp.hpp>
 #include <Eigen/Eigen>
@@ -56,6 +57,14 @@ struct LocalPositionMeasurement
   std::optional<Eigen::Quaternionf> attitude_quaternion {std::nullopt};
   /** @brief Variance of attitude error in body frame. */
   std::optional<Eigen::Vector3f> attitude_variance {std::nullopt};
+
+  /**
+   * @brief Reset counter for vision/SLAM estimate discontinuities.
+   * Increment whenever the external pose estimate resets (e.g. relocalization, loop closure).
+   * PX4 EKF2 uses this to reset its internal state and avoid fusion jumps.
+   * If not set, 0 is sent (no reset).
+   */
+  std::optional<uint8_t> reset_counter {std::nullopt};
 };
 
 /**

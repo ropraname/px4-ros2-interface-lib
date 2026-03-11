@@ -103,6 +103,9 @@ void LocalPositionMeasurementInterface::update(
   // Angular velocity (unused at the moment)
   aux_local_position.angular_velocity = {NAN, NAN, NAN};
 
+  // Reset counter: signal estimate resets to PX4 EKF2 (e.g. VIO relocalization)
+  aux_local_position.reset_counter = local_position_measurement.reset_counter.value_or(0);
+
   // Publish
   aux_local_position.timestamp = 0; // Let PX4 set the timestamp
   _aux_local_position_pub->publish(aux_local_position);
